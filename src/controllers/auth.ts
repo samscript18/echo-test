@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { prismaClient } from "../index";
 import { hashPassword, comparePassword } from "../helpers/auth.helper";
 import jwtHelper from "../helpers/jwt.helper";
-import { SignUpSchema } from "../schema/auth/users";
+import { SignUpSchema } from "../schema/users";
 import { BadRequestsException } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
 import { NotFoundException } from "../exceptions/not-found";

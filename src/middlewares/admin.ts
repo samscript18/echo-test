@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { UnAuthorizedException } from "../exceptions/unathorized.exception";
+import { UnAuthorizedException } from "../exceptions/unauthorized.exception";
 import { ErrorCode } from "../exceptions/root";
 
 export const adminMiddleware = (
