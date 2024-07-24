@@ -22,3 +22,7 @@ export const UpdateUserSchema = z.object({
   defaultShippingAddressId: z.number().optional(),
   defaultBillingAddressId: z.number().optional(),
 });
+
+export const UserRoleSchema = z.object({
+  role: z.enum(["USER", "ADMIN"]),
+});
