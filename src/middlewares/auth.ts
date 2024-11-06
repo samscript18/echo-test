@@ -1,23 +1,14 @@
-import { NextFunction, Request, Response } from "express";
-import { UnAuthorizedException } from "../exceptions/unauthorized.exception";
-import { ErrorCode } from "../exceptions/root";
-import { prismaClient } from "..";
-import jwtHelper from "../helpers/jwt.helper";
-import { User } from "@prisma/client";
-
-// interface User {
-//   id: number;
-//   name: string;
-//   email: string;
-//   password: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
+import { NextFunction, Request, Response } from 'express';
+import { UnAuthorizedException } from '../exceptions/unauthorized.exception';
+import { ErrorCode } from '../exceptions/root';
+import { prismaClient } from '..';
+import jwtHelper from '../helpers/jwt.helper';
+import { Admin } from '@prisma/client';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: User;
+      admin?: Admin;
     }
   }
 }
@@ -29,27 +20,27 @@ const authMiddleware = async (
 ) => {
   const token = req.headers.authorization;
   if (!token) {
-    next(new UnAuthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
+    next(new UnAuthorizedException('Unauthorized', ErrorCode.UNAUTHORIZED));
   }
   try {
     const payload = await jwtHelper.verifyToken(token!);
-    if (!payload.userId) {
-      next(new UnAuthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
+    if (!payload.adminId) {
+      next(new UnAuthorizedException('Unauthorized', ErrorCode.UNAUTHORIZED));
     }
 
-    const user = await prismaClient.user.findFirst({
-      where: { id: +payload.userId },
+    const admin = await prismaClient.admin.findFirst({
+      where: { id: +payload.adminId },
     });
 
-    if (!user) {
-      next(new UnAuthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
+    if (!admin) {
+      next(new UnAuthorizedException('Unauthorized', ErrorCode.UNAUTHORIZED));
     }
-    req.user = user!;
+    req.admin = admin!;
 
     next();
   } catch (error) {
     next(
-      new UnAuthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED, error)
+      new UnAuthorizedException('Unauthorized', ErrorCode.UNAUTHORIZED, error)
     );
   }
 };

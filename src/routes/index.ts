@@ -1,14 +1,8 @@
-import { Router } from "express";
-import { authRoutes } from "./auth";
-import { productsRoutes } from "./products";
-import { userRoutes } from "./user";
-import { cartRoutes } from "./cart";
-import { orderRoutes } from "./order";
+import { Router } from 'express';
+import { authRoutes } from './auth';
+import { adminRoutes } from './admin';
 
 export const rootRouter: Router = Router();
 
-rootRouter.use("/auth", authRoutes);
-rootRouter.use("/products", productsRoutes);
-rootRouter.use("/user", userRoutes);
-rootRouter.use("/cart", cartRoutes);
-rootRouter.use("/order", orderRoutes);
+rootRouter.use('/auth', authRoutes);
+rootRouter.use('/user', adminRoutes);

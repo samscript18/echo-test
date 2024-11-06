@@ -1,53 +1,56 @@
-import { Request, Response } from "express";
-import { prismaClient } from "../index";
-import { hashPassword, comparePassword } from "../helpers/auth.helper";
-import jwtHelper from "../helpers/jwt.helper";
-import { SignUpSchema } from "../schema/users";
-import { BadRequestsException } from "../exceptions/bad-request";
-import { ErrorCode } from "../exceptions/root";
-import { NotFoundException } from "../exceptions/not-found";
+import { Request, Response } from 'express';
+import { prismaClient } from '../index';
+import { hashPassword, comparePassword } from '../helpers/auth.helper';
+import jwtHelper from '../helpers/jwt.helper';
+import { SignUpSchema } from '../schema/admin';
+import { BadRequestsException } from '../exceptions/bad-request';
+import { ErrorCode } from '../exceptions/root';
+import { NotFoundException } from '../exceptions/not-found';
 
 export const signup = async (req: Request, res: Response) => {
   SignUpSchema.parse(req.body);
-  const { name, email, password } = req.body;
-  const userExists = await prismaClient.user.findFirst({ where: { email } });
-  if (userExists) {
+  const adminExists = await prismaClient.admin.findFirst({
+    where: { email: req.body.email },
+  });
+  if (adminExists) {
     throw new BadRequestsException(
-      "user with this email already exists",
-      ErrorCode.USER_ALREADY_EXISTS
+      'admin with this email already exists',
+      ErrorCode.ADMIN_ALREADY_EXISTS
     );
   }
-  const hashedPassword = await hashPassword(password);
-  const user = await prismaClient.user.create({
+  const hashedPassword = await hashPassword(req.body.password);
+  const admin = await prismaClient.admin.create({
     data: {
-      name,
-      email,
       password: hashedPassword,
+      ...req.body,
     },
   });
-  res.json({ user });
+  res.json({ admin });
 };
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  let user = await prismaClient.user.findFirst({ where: { email } });
-  if (!user) {
+  let admin = await prismaClient.admin.findFirst({ where: { email } });
+  if (!admin) {
     throw new NotFoundException(
-      "User does not exist",
-      ErrorCode.USER_NOT_FOUND
+      'Admin does not exist',
+      ErrorCode.ADMIN_NOT_FOUND
     );
   }
-  const isMatch = await comparePassword(password, user?.password!);
+  const isMatch = await comparePassword(password, admin.password!);
   if (!isMatch) {
     throw new BadRequestsException(
-      "Incorrect password",
+      'Incorrect password',
       ErrorCode.INCORRECT_PASSWORD
     );
   }
-  const accessToken = await jwtHelper.generateToken(user?.id.toString());
-  res.json({ user, accessToken });
+  const accessToken = await jwtHelper.generateToken(admin?.id.toString());
+  res.json({ accessToken });
 };
 
 export const me = async (req: Request, res: Response) => {
-  res.json(req.user);
+  const admin = await prismaClient.admin.findFirst({
+    where: { id: req.admin?.id },
+  });
+  res.json(admin);
 };
