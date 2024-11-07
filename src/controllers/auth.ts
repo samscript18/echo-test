@@ -21,11 +21,11 @@ export const signup = async (req: Request, res: Response) => {
   const hashedPassword = await hashPassword(req.body.password);
   const admin = await prismaClient.admin.create({
     data: {
-      password: hashedPassword,
       ...req.body,
+      password: hashedPassword,
     },
   });
-  res.json({ admin });
+  res.json(admin);
 };
 
 export const login = async (req: Request, res: Response) => {

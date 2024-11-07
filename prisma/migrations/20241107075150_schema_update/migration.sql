@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "admins" ALTER COLUMN "date_of_birth" DROP NOT NULL,
+ALTER COLUMN "permanent_address" DROP NOT NULL,
+ALTER COLUMN "present_address" DROP NOT NULL,
+ALTER COLUMN "city" DROP NOT NULL,
+ALTER COLUMN "postal_code" DROP NOT NULL,
+ALTER COLUMN "country" DROP NOT NULL,
+ALTER COLUMN "role" DROP NOT NULL;

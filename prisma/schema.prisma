@@ -19,19 +19,19 @@ enum Role {
 }
 
 model Admin {
-  id                Int      @id @default(autoincrement())
+  id                Int       @id @default(autoincrement())
   userName          String
-  email             String   @unique
+  email             String    @unique
   password          String
-  date_of_birth     DateTime
-  permanent_address String
-  present_address   String
-  city              String
-  postal_code       String
-  country           String
-  role              Role     @default(ADMIN)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  date_of_birth     DateTime?
+  permanent_address String?
+  present_address   String?
+  city              String?
+  postal_code       String?
+  country           String?
+  role              Role?     @default(ADMIN)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@map("admins")
 }

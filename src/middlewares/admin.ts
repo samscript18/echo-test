@@ -11,6 +11,11 @@ export const adminMiddleware = (
   if (role === 'ADMIN') {
     next();
   } else {
-    next(new UnAuthorizedException('Unauthorized', ErrorCode.UNAUTHORIZED));
+    next(
+      new UnAuthorizedException(
+        `Only ${role} has access to this`,
+        ErrorCode.UNAUTHORIZED
+      )
+    );
   }
 };

@@ -18,14 +18,23 @@ const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization;
-  if (!token) {
+  const authHeader = req.headers.authorization!;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     next(new UnAuthorizedException('Unauthorized', ErrorCode.UNAUTHORIZED));
+  }
+
+  const token = authHeader.split(' ')[1];
+  if (!token) {
+    next(
+      new UnAuthorizedException('No token provided', ErrorCode.UNAUTHORIZED)
+    );
   }
   try {
     const payload = await jwtHelper.verifyToken(token!);
+
     if (!payload.adminId) {
-      next(new UnAuthorizedException('Unauthorized', ErrorCode.UNAUTHORIZED));
+      next(new UnAuthorizedException('Invalid token', ErrorCode.UNAUTHORIZED));
     }
 
     const admin = await prismaClient.admin.findFirst({

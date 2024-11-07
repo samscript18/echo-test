@@ -6,6 +6,6 @@ import { adminMiddleware } from '../middlewares/admin';
 
 export const authRoutes: Router = Router();
 
-authRoutes.post('/signup', [adminMiddleware], errorHandler(signup));
-authRoutes.post('/login', [adminMiddleware], errorHandler(login));
+authRoutes.post('/signup', errorHandler(signup));
+authRoutes.post('/login', errorHandler(login));
 authRoutes.get('/me', [authMiddleware, adminMiddleware], errorHandler(me));
