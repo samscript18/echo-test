@@ -1,0 +1,161 @@
+openapi: 3.0.0
+info:
+  title: Echo-Test-API
+  contact: {}
+  version: '1.0'
+servers:
+  - url: https://echo-test-zlmc.onrender.com/api
+    variables: {}
+paths:
+  /admin/profile:
+    put:
+      tags:
+        - Admin
+      summary: Update Admin Profile
+      operationId: UpdateAdminProfile
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+      servers:
+        - url: https://echo-test-zlmc.onrender.com/api
+          variables: {}
+    parameters: []
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Register Admin
+      operationId: RegisterAdmin
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterAdminRequest'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+      servers:
+        - url: https://echo-test-zlmc.onrender.com/api
+          variables: {}
+    parameters: []
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Admin Login
+      operationId: AdminLogin
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLoginRequest'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+      servers:
+        - url: https://echo-test-zlmc.onrender.com/api
+          variables: {}
+    parameters: []
+  /auth/me:
+    get:
+      tags:
+        - Auth
+      summary: Get Admin Profile
+      operationId: GetAdminProfile
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+      servers:
+        - url: https://echo-test-zlmc.onrender.com/api
+          variables: {}
+    parameters: []
+components:
+  schemas:
+    RegisterAdminRequest:
+      title: AdminSignup
+      required:
+        - userName
+        - email
+        - password
+      type: object
+      properties:
+        userName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        userName: lammylex
+        email: lammylex12@gmail.com
+        password: lammylex123
+    AdminLoginRequest:
+      title: AdminLogin
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Admin:
+      type: object
+      properties:
+        userName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        date_of_birth:
+          type: string
+        permanent_address:
+          type: string
+        present_address:
+          type: string
+        city:
+          type: string
+        postal_code:
+          type: string
+        country:
+          type: string
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+  - name: Admin
+    description: ''
+  - name: Auth
+    description: ''
