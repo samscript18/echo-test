@@ -4,9 +4,10 @@ import { prismaClient } from '..';
 
 export const updateAdmin = async (req: Request, res: Response) => {
   const validatedData = UpdateAdminSchema.parse(req.body);
-  const updatedUser = await prismaClient.admin.update({
+  const updatedAdmin = await prismaClient.admin.update({
     where: { id: req.admin?.id },
     data: validatedData,
   });
-  res.json({ success: true, updatedUser });
+  const { password, ...rest } = updatedAdmin;
+  res.json({ success: true, rest });
 };

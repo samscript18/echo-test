@@ -6,6 +6,7 @@ import { SignUpSchema } from '../schema/admin';
 import { BadRequestsException } from '../exceptions/bad-request';
 import { ErrorCode } from '../exceptions/root';
 import { NotFoundException } from '../exceptions/not-found';
+import { Admin } from '@prisma/client';
 
 export const signup = async (req: Request, res: Response) => {
   SignUpSchema.parse(req.body);
@@ -25,7 +26,8 @@ export const signup = async (req: Request, res: Response) => {
       password: hashedPassword,
     },
   });
-  res.json(admin);
+  const { password, ...rest } = admin;
+  res.json(rest);
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -52,5 +54,6 @@ export const me = async (req: Request, res: Response) => {
   const admin = await prismaClient.admin.findFirst({
     where: { id: req.admin?.id },
   });
-  res.json(admin);
+  const { password, ...rest } = admin!;
+  res.json(rest);
 };
